@@ -1,0 +1,38 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'full_processing.full_processing'
+
+repositories {
+    flatDir {
+	dirs '/usr/local/wpilib/java'
+        dirs '/usr/local/lib/vmxpi'
+    }
+}
+
+dependencies {
+    compile(name: 'opencv-331', ext: 'jar')
+    compile(name: 'wpiutil', ext: 'jar')
+    compile(name: 'cscore', ext: 'jar')
+    compile(name: 'ntcore', ext: 'jar')
+    compile(name: 'vmxpi_hal_java', ext: 'jar')
+
+    runtime files('/usr/local/wpilib/java/cscore.jar', '/usr/local/wpilib/java/ntcore.jar', '/usr/local/wpilib/java/wpiutil.jar', '/usr/local/wpilib/java/opencv-331.jar', '/usr/local/lib/vmxpi/vmxpi_hal_java.jar')
+    runtime fileTree(dir: 'libs', include: '*.jar')
+ }
+
+jar {
+    baseName = 'full_processing'
+    version =  '1.0.0'
+}
+
+run {
+    environment "LD_LIBRARY_PATH", "/usr/local/wpilib/lib:/usr/local/lib/vmxpi:/usr/local/share/OpenCV/java"
+} 
+
+task copyFiles(type: Copy) {
+    from '/home/pi/grip/pipeline/java'
+    into 'src/main/java'
+}
+
+compileJava.dependsOn(copyFiles)

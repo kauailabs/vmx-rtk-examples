@@ -6,4 +6,4 @@ clean:
 	gradle clean
 
 run:
-	gradle run
+	sudo gradle run
