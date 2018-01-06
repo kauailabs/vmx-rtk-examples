@@ -1,0 +1,27 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'navx_vmxpi.navx_vmxpi'
+
+repositories {
+    flatDir {
+	dirs '/usr/local/wpilib/java'
+        dirs '/usr/local/lib/vmxpi'
+    }
+}
+
+dependencies {
+    compile(name: 'vmxpi_hal_java', ext: 'jar')
+
+    runtime files('/usr/local/lib/vmxpi/vmxpi_hal_java.jar')
+    runtime fileTree(dir: 'libs', include: '*.jar')
+ }
+
+jar {
+    baseName = 'navx_vmxpi'
+    version =  '1.0.0'
+}
+
+run {
+    environment "LD_LIBRARY_PATH", "/usr/local/lib/vmxpi"
+} 

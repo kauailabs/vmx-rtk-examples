@@ -1,0 +1,30 @@
+The C++ examples are designed to be build from a command line (rather than an IDE like eclipse).
+
+To build each example, simply enter that directory and type:
+
+  make
+
+To run each sample, simply enter that directory and type:
+
+  make run
+
+NOTE 1:  There is also a convenience Makefile in ~this~ directory that can make, clean and run all of the examples.
+
+NOTE 2:  The original "CmakeWpilib" build was not building cscore.
+Thus, before building this example the following manual steps have to be executed to ensure the cscore static library (libcscore.a) is built:
+
+1) Edit ~/CmakeWpilib/libraries/CmakeLists.txt, adding this line at the end:
+
+add_subdirectory(cscore)
+
+2) Re-run cmake to re-generate make files for the CmakeWpilib build
+
+3) Re-run make, to build the files
+
+NOTE:  The build has an error building the ~Java~ version of cscore.  However, this happens ~after~ the cscore static library is built.  So you can ignore that build error for now.
+
+At that point, the following file should have been generated:
+
+~/CmakeWpilib/build/libraries/cscore/libcscore.a
+
+And that file is needed by this example.

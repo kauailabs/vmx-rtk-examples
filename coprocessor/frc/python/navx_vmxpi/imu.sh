@@ -1,0 +1,1 @@
+sudo python ./imu.py

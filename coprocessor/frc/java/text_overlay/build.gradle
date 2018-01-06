@@ -1,0 +1,29 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'text_overlay.text_overlay'
+
+repositories {
+    flatDir {
+	dirs '/usr/local/wpilib/java'
+        dirs '/usr/local/lib/vmxpi'
+    }
+}
+
+dependencies {
+    compile(name: 'opencv-331', ext: 'jar')
+    compile(name: 'wpiutil', ext: 'jar')
+    compile(name: 'cscore', ext: 'jar')
+
+    runtime files('/usr/local/wpilib/java/cscore.jar', '/usr/local/wpilib/java/wpiutil.jar', '/usr/local/wpilib/java/opencv-331.jar')
+    runtime fileTree(dir: 'libs', include: '*.jar')
+ }
+
+jar {
+    baseName = 'text_overlay'
+    version =  '1.0.0'
+}
+
+run {
+    environment "LD_LIBRARY_PATH", "/usr/local/wpilib/lib:/usr/local/lib/vmxpi:/usr/local/share/OpenCV/java"
+} 
