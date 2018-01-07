@@ -1,10 +1,13 @@
 package full_processing;
 
+import java.math.BigInteger;
+
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
 import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
+
 import org.opencv.core.Mat;
 import org.opencv.core.Core;
 import org.opencv.core.Size;
@@ -14,8 +17,6 @@ import org.opencv.videoio.Videoio;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-
-import java.math.BigInteger;
 
 import com.kauailabs.vmx.VMXPi;
 
@@ -37,9 +38,12 @@ public class full_processing{
 
 	public static void main(String argv[]) {
 		
-
+		/* Instantiate pipeline exported from GRIP.  If not using grip, set pipeline = null; */
 		VisionPipeline pipeline = new GripPipeline();
 
+		String outputVideoFilePath = "/data/output.avi"; /* Set to null if video writing not desired */
+
+		/* Open communication to VMX-pi, to acquire IMU data */
 		VMXPi vmx = new VMXPi(false, (byte)50);
 		if (!vmx.IsOpen()) {
 			System.out.println("Error:  Unable to open VMX Client.");
@@ -50,47 +54,77 @@ public class full_processing{
 			System.exit(1);
 		}
 
-		// Connect NetworkTables, and get access to the publishing table
+		/* Connect NetworkTables */
+		/* Note:  actual IP address should be robot IP address */
 		NetworkTableInstance inst = NetworkTableInstance.getDefault();
 		inst.startClient("192.168.0.113");
 
+		/* Open connection to USB Camera (video device 0 [/dev/video0]) */
 		UsbCamera camera = new UsbCamera("usbcam", 0);
-		camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 320, 240, 15);
-		MjpegServer mjpegServer = new MjpegServer("httpserver", 8081);
-		mjpegServer.setSource(camera);
+
+		/* Configure Camera */
+		/* Note:  Higher resolution & framerate is possible, depending upon processing cpu usage */
+		int width = 320;
+		int height = 240;
+		int frames_per_sec = 15;
+		camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, width, height, frames_per_sec);
+		
+		/* Start raw Video Streaming Server */
+		MjpegServer rawVideoServer = new MjpegServer("raw_video_server", 8081);
+		rawVideoServer.setSource(camera);
 		CvSink cvsink = new CvSink("cvsink");
 		cvsink.setSource(camera);
+
+		/* Start processed Video server */
 		CvSource cvsource = new CvSource("cvsource",
-				VideoMode.PixelFormat.kMJPEG, 320, 240, 15);
-		MjpegServer cvMjpegServer = new MjpegServer("cvhttpserver", 8082);
-		cvMjpegServer.setSource(cvsource);
+				VideoMode.PixelFormat.kMJPEG, width, height, frames_per_sec);
+		MjpegServer processedVideoServer = new MjpegServer("processed_video_server", 8082);
+		processedVideoServer.setSource(cvsource);
 
-		Size frameSize = new Size(320, 240);
-		VideoWriter videoWriter = new VideoWriter("/data/output.avi",
-				VideoWriter.fourcc('F', 'M', 'P', '4'), 15.0, frameSize, true);
+		/* Create Video Writer, if enabled */
+		Size frameSize = new Size(width, height);
+		VideoWriter videoWriter = null;
+		if (outputVideoFilePath != null) {
+			videoWriter = new VideoWriter(outputVideoFilePath,
+				VideoWriter.fourcc('F', 'M', 'P', '4'), (double)frames_per_sec, frameSize, true);
+		}
 
+		/* Pre-allocate a video frame */
 		Mat frame = new Mat();
 
 		int count = 0;
 		while (count < 100) {
-			long time = cvsink.grabFrame(frame);
 
-			// overlay time onto video
-			String osTimeString = BigInteger.valueOf(time).toString();
-		        // Draw Text to Image
+			/* Acquire new video frame */
+			String videoTimestampString = null;
+			long video_timestamp = cvsink.grabFrame(frame);
+			if (video_timestamp == 0) {
+				cvsink.getError();
+				try {
+					Thread.sleep((1000/frames_per_sec)/2, 0);
+				} catch (InterruptedException e) {
+					break;
+    				}
+				continue;
+			} else {
+				videoTimestampString = BigInteger.valueOf(video_timestamp).toString();
+				System.out.println("Video Timestamp:  " + videoTimestampString);
+			}			
+
+			/* Overlay timestamps & orientation data onto video */
 		        Imgproc.putText (
-		           frame,                          // Matrix obj of the image
-		           osTimeString,          	   // Text to be added
+		           frame,                          // Video frame
+		           videoTimestampString,       	   // Text to be added
 		           new Point(30, 30),              // point
 		           Core.FONT_HERSHEY_SIMPLEX ,     // front face
 		           0.5,                            // front scale
 		           new Scalar(255, 255, 255),      // Scalar object for color (RGB)
 		           2                               // Thickness
       			);
-			String imuTimeString = Integer.toString(vmx.getAHRS().GetLastSensorTimestamp());
+			String imuTimestampString = Integer.toString(vmx.getAHRS().GetLastSensorTimestamp());
 		        Imgproc.putText (
-		           frame,                          // Matrix obj of the image
-		           imuTimeString,          	   // Text to be added
+		           frame,                          // Video frame
+		           imuTimestampString,        	   // Text to be added
 		           new Point(30, 50),              // point
 		           Core.FONT_HERSHEY_SIMPLEX ,     // front face
 		           0.5,                            // front scale
@@ -99,7 +133,7 @@ public class full_processing{
       			);
 			String yawString = Double.toString(vmx.getAHRS().GetYaw());
 		        Imgproc.putText (
-		           frame,                          // Matrix obj of the image
+		           frame,                          // Video frame
 		           yawString,          	   	   // Text to be added
 		           new Point(30, 70),              // point
 		           Core.FONT_HERSHEY_SIMPLEX ,     // front face
@@ -109,7 +143,7 @@ public class full_processing{
       			);
 			String pitchString = Double.toString(vmx.getAHRS().GetPitch());
 		        Imgproc.putText (
-		           frame,                          // Matrix obj of the image
+		           frame,                          // Video frame
 		           pitchString,          	   // Text to be added
 		           new Point(30, 90),              // point
 		           Core.FONT_HERSHEY_SIMPLEX ,     // front face
@@ -119,7 +153,7 @@ public class full_processing{
       			);
 			String rollString = Double.toString(vmx.getAHRS().GetRoll());
 		        Imgproc.putText (
-		           frame,                          // Matrix obj of the image
+		           frame,                          // Video frame
 		           rollString,          	   // Text to be added
 		           new Point(30, 110),             // point
 		           Core.FONT_HERSHEY_SIMPLEX ,     // front face
@@ -128,22 +162,25 @@ public class full_processing{
 		           2                               // Thickness
       			);
 
-			inst.getEntry("/vmx/imageOSTimestamp").setNumber(BigInteger.valueOf(time));
+			/* Update Network Tables with timestamps & orientation data */
+			inst.getEntry("/vmx/videoOSTimestamp").setNumber(BigInteger.valueOf(video_timestamp));
 			inst.getEntry("/vmx/navxSensorTimestamp").setNumber(vmx.getAHRS().GetLastSensorTimestamp());
 			inst.getEntry("/vmx/navxYaw").setNumber(vmx.getAHRS().GetYaw());
 			inst.getEntry("/vmx/navxPitch").setNumber(vmx.getAHRS().GetPitch());
 			inst.getEntry("/vmx/navxRoll").setNumber(vmx.getAHRS().GetRoll());
 
+			/* Invoke processing pipeline, if one is present */
 			if (pipeline != null) {
 				pipeline.process(frame);
 			}
 
-			videoWriter.write(frame);
+			/* Write Frame to video */
+			if (videoWriter != null) {
+				videoWriter.write(frame);
+			}
+
 			count++;
 		}
 		vmx.delete(); // Immediately dispose of all resources used by vmx object.
 	}
 }
-
-// final fourCC = new int("XVID");
-// VideoWriter out = new VideoWriter("output.avi", fourCC, 20.0,());
