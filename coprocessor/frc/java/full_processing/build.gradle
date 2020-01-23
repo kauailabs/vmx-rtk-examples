@@ -5,19 +5,19 @@ mainClassName = 'full_processing.full_processing'
 
 repositories {
     flatDir {
-	dirs '/usr/local/wpilib/java'
+	dirs '/usr/local/frc/third-party/java'
         dirs '/usr/local/lib/vmxpi'
     }
 }
 
 dependencies {
-    compile(name: 'opencv-331', ext: 'jar')
+    compile(name: 'opencv-341', ext: 'jar')
     compile(name: 'wpiutil', ext: 'jar')
     compile(name: 'cscore', ext: 'jar')
     compile(name: 'ntcore', ext: 'jar')
     compile(name: 'vmxpi_hal_java', ext: 'jar')
 
-    runtime files('/usr/local/wpilib/java/cscore.jar', '/usr/local/wpilib/java/ntcore.jar', '/usr/local/wpilib/java/wpiutil.jar', '/usr/local/wpilib/java/opencv-331.jar', '/usr/local/lib/vmxpi/vmxpi_hal_java.jar')
+    runtime files('/usr/local/frc/third-party/java/cscore.jar', '/usr/local/frc/third-party/java/ntcore.jar', '/usr/local/frc/third-party/java/wpiutil.jar', '/usr/local/frc/third-party/java/opencv-341.jar', '/usr/local/lib/vmxpi/vmxpi_hal_java.jar')
     runtime fileTree(dir: 'libs', include: '*.jar')
  }
 
@@ -27,7 +27,7 @@ jar {
 }
 
 run {
-    environment "LD_LIBRARY_PATH", "/usr/local/wpilib/lib:/usr/local/lib/vmxpi:/usr/local/share/OpenCV/java"
+    environment "LD_LIBRARY_PATH", "/usr/local/frc/third-party/lib:/usr/local/lib/vmxpi:/usr/local/share/OpenCV/java"
 } 
 
 task copyFiles(type: Copy) {

@@ -4,7 +4,7 @@ DEPS=$(SRCS:.cpp=.d)
 BINS=$(SRCS:.cpp=)
 SCRIPTS=$(SRCS:.cpp=.sh)
 
-WPILIB_ROOT_DIR=/usr/local/wpilib
+WPILIB_ROOT_DIR=/usr/local/frc/third-party
 WPILIB_INC_DIR=$(WPILIB_ROOT_DIR)/include
 
 OPENCV_LIB_DIR=/usr/local/lib

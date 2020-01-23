@@ -16,11 +16,11 @@ void DisplayVMXError(VMXErrorCode vmxerr) {
 	printf("VMXError %d:  %s\n", vmxerr, p_err_description);
 }
 
-class AHRSCallback : public ITimestampedDataSubscriber
+class AHRSCallback : public IVMXTimestampedAHRSDataSubscriber
 {
-	AHRS& ahrs;
+	vmx::AHRS& ahrs;
 public:
-	AHRSCallback(AHRS& ahrs_ref) :
+	AHRSCallback(vmx::AHRS& ahrs_ref) :
 		ahrs(ahrs_ref) {}
 	virtual ~AHRSCallback() {}
     virtual void timestampedDataReceived( long system_timestamp, long sensor_timestamp, const AHRSProtocol::AHRSUpdateBase& sensor_data, void * context )

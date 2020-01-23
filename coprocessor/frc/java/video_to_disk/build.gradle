@@ -5,17 +5,17 @@ mainClassName = 'video_to_disk.video_to_disk'
 
 repositories {
     flatDir {
-	dirs '/usr/local/wpilib/java'
+	dirs '/usr/local/frc/third-party/java'
         dirs '/usr/local/lib/vmxpi'
     }
 }
 
 dependencies {
-    compile(name: 'opencv-331', ext: 'jar')
+    compile(name: 'opencv-341', ext: 'jar')
     compile(name: 'wpiutil', ext: 'jar')
     compile(name: 'cscore', ext: 'jar')
 
-    runtime files('/usr/local/wpilib/java/cscore.jar', '/usr/local/wpilib/java/wpiutil.jar', '/usr/local/wpilib/java/opencv-331.jar')
+    runtime files('/usr/local/frc/third-party/java/cscore.jar', '/usr/local/frc/third-party/java/wpiutil.jar', '/usr/local/frc/third-party/java/opencv-341.jar')
     runtime fileTree(dir: 'libs', include: '*.jar')
  }
 
@@ -25,5 +25,5 @@ jar {
 }
 
 run {
-    environment "LD_LIBRARY_PATH", "/usr/local/wpilib/lib:/usr/local/lib/vmxpi:/usr/local/share/OpenCV/java"
+    environment "LD_LIBRARY_PATH", "/usr/local/frc/third-party/lib:/usr/local/lib/vmxpi:/usr/local/share/OpenCV/java"
 } 

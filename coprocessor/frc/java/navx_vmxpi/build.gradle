@@ -5,7 +5,7 @@ mainClassName = 'navx_vmxpi.navx_vmxpi'
 
 repositories {
     flatDir {
-	dirs '/usr/local/wpilib/java'
+	dirs '/usr/local/frc/third-party/java'
         dirs '/usr/local/lib/vmxpi'
     }
 }
