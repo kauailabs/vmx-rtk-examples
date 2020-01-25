@@ -8,3 +8,5 @@ These examples include Vision/Motion examples for FRC.
 The latest vmx-rtk-examples are always available at the <a href="https://github.com/kauailabs/vmx-rtk-examples>vmx-rtk-examples Github site<a>.
 
 NOTE:  The VMX Robotics Toolkit may be required to build and run these examples.
+
+NOTE:  execute the setup_library_paths.sh script once, to configure the ldconfig runtime library paths

@@ -38,4 +38,4 @@ clean:
 	$(RM) $(OBJS) $(DEPS) $(BINS)
 
 run:
-	./acquire_and_stream_video.sh
+	./acquire_and_stream_video

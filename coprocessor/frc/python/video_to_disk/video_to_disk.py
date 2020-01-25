@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# Since ROS adds python.27 packages onto the system path, remove this when running this python3 code.
+import sys
+sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
+
 import cscore as cs
 import cv2 as cv
 import numpy as np

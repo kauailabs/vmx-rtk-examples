@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import sys
-import imp
+from importlib.machinery import SourceFileLoader
 
-sys.path.append('/home/pi/.local/lib/python3.5/site-packages')
+sys.path.append('/home/pi/.local/lib/python3.7/site-packages')
 
 from networktables import NetworkTables
 from networktables.util import ntproperty
@@ -16,7 +16,7 @@ from time import sleep
 from sys import exit
 
 sys.path.append('/usr/local/lib/vmxpi/')
-vmxpi = imp.load_source('vmxpi_hal_python', '/usr/local/lib/vmxpi/vmxpi_hal_python.py')
+vmxpi = SourceFileLoader('vmxpi_hal_python', '/usr/local/lib/vmxpi/vmxpi_hal_python.py').load_module()
 
 vmx = vmxpi.VMXPi(False,50)
 if vmx.IsOpen() is False:

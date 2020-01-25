@@ -14,6 +14,6 @@ clean:
 	$(RM) $(OBJECTS) $(DEPS) $(BINS)
 
 run:
-	sudo ./$(BINS)
+	sudo ./navx_vmxpi
 
 -include $(DEPS)

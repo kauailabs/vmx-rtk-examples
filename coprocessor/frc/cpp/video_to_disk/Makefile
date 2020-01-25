@@ -30,4 +30,4 @@ clean:
 	$(RM) $(OBJS) $(DEPS) $(BINS)
 
 run:
-	./$(SCRIPTS)
+	./video_to_disk

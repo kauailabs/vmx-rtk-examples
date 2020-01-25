@@ -1,1 +1,1 @@
-sudo python ./imu.py
+sudo python3 ./imu.py
