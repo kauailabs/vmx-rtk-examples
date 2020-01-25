@@ -28,7 +28,7 @@ int main() {
 	/* Instantiate pipeline exported from GRIP.  If not using grip, set pipeline = NULL; */
 	VisionPipeline *p_pipeline = new GripPipeline();
 	
-	const char* p_outputVideoFilePath = "/data/output.avi"; /* Set to NULL if video writing not desired */
+	const char* p_outputVideoFilePath = "/media/pi/data/output.avi"; /* Set to NULL if video writing not desired */
 	
 	/* Open communication to VMX-pi, to acquire IMU data */
 	VMXPi vmx(false, 50);

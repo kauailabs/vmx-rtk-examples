@@ -30,7 +30,7 @@ if vmx.IsOpen() is False:
 pipeline = None
 
 # Video output file.  Set to None if video writing not desired.
-outputVideoFilePath = "/data/output.avi"
+outputVideoFilePath = "/media/pi/data/output.avi"
 videoWriter = None
 
 # Connect NetworkTables

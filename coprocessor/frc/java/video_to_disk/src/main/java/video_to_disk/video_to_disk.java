@@ -27,7 +27,7 @@ public class video_to_disk{
 		cvMjpegServer.setSource(cvsource);
 
 		Size frameSize = new Size(320, 240);
-		VideoWriter videoWriter = new VideoWriter("/data/output.avi",
+		VideoWriter videoWriter = new VideoWriter("/media/pi/data/output.avi",
 				VideoWriter.fourcc('F', 'M', 'P', '4'), 15.0, frameSize, true);
 
 		Mat frame = new Mat();

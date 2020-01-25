@@ -41,7 +41,7 @@ public class full_processing{
 		/* Instantiate pipeline exported from GRIP.  If not using grip, set pipeline = null; */
 		VisionPipeline pipeline = new GripPipeline();
 
-		String outputVideoFilePath = "/data/output.avi"; /* Set to null if video writing not desired */
+		String outputVideoFilePath = "/media/pi/data/output.avi"; /* Set to null if video writing not desired */
 
 		/* Open communication to VMX-pi, to acquire IMU data */
 		VMXPi vmx = new VMXPi(false, (byte)50);

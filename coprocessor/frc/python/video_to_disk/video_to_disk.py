@@ -23,7 +23,7 @@ cvMjpegServer = cs.MjpegServer("cvhttpserver", 8082)
 cvMjpegServer.setSource(cvsource)
 
 frameSize = (width, height)
-videoWriter = cv.VideoWriter("/data/output.avi",
+videoWriter = cv.VideoWriter("/media/pi/data/output.avi",
 				cv.VideoWriter.fourcc('F', 'M', 'P', '4'), 15.0, frameSize, True)
 
 img = np.zeros(shape=(height, width, 3), dtype=np.uint8)    

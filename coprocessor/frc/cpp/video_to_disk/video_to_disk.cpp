@@ -19,7 +19,7 @@ int main() {
 	cvMjpegServer.SetSource(cvsource);
 
 	Size frameSize(320, 240);
-	VideoWriter videoWriter("/data/output.avi",
+	VideoWriter videoWriter("/media/pi/data/output.avi",
 			VideoWriter::fourcc('F', 'M', 'P', '4'), 15.0, frameSize, true);
 
 	Mat frame;
