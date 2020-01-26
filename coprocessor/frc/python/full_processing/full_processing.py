@@ -62,7 +62,7 @@ cvMjpegServer.setSource(cvsource)
 if outputVideoFilePath is not None:
 	frameSize = (width, height)
 	videoWriter = cv.VideoWriter(outputVideoFilePath,
-				cv.VideoWriter.fourcc('F', 'M', 'P', '4'), 15.0, frameSize, True)
+				cv.VideoWriter.fourcc('M', 'J', 'P', 'G'), 15.0, frameSize, True)
 
 img = np.zeros(shape=(height, width, 3), dtype=np.uint8)    
 

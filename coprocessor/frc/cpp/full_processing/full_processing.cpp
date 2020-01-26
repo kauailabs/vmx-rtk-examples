@@ -72,11 +72,11 @@ int main() {
 	VideoWriter *p_videoWriter = NULL;
 	if (p_outputVideoFilePath != NULL) {
 		p_videoWriter = new VideoWriter(p_outputVideoFilePath,
-			VideoWriter::fourcc('F', 'M', 'P', '4'), (double)frames_per_sec, frameSize, true);
+			VideoWriter::fourcc('M', 'J', 'P', 'G'), (double)frames_per_sec, frameSize, true);
 	}
 
 	/* Pre-allocate a video frame */
-	Mat frame;
+	Mat frame(frameSize, CV_8UC(3));
 
 	int count = 0;
 	while (count < 100) {

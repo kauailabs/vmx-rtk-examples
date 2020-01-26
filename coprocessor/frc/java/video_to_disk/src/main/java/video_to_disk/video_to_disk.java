@@ -5,6 +5,7 @@ import edu.wpi.cscore.VideoMode;
 import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Core;
 import org.opencv.core.Size;
@@ -28,9 +29,9 @@ public class video_to_disk{
 
 		Size frameSize = new Size(320, 240);
 		VideoWriter videoWriter = new VideoWriter("/media/pi/data/output.avi",
-				VideoWriter.fourcc('F', 'M', 'P', '4'), 15.0, frameSize, true);
+				VideoWriter.fourcc('M', 'J', 'P', 'G'), 15.0, frameSize, true);
 
-		Mat frame = new Mat();
+		Mat frame = new Mat(frameSize, CvType.CV_8UC(3));
 
 		int count = 0;
 		while (count < 100) {

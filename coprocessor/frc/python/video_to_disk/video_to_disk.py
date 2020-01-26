@@ -28,7 +28,12 @@ cvMjpegServer.setSource(cvsource)
 
 frameSize = (width, height)
 videoWriter = cv.VideoWriter("/media/pi/data/output.avi",
-				cv.VideoWriter.fourcc('F', 'M', 'P', '4'), 15.0, frameSize, True)
+				cv.VideoWriter.fourcc('M', 'J', 'P', 'G'), 15.0, frameSize, True)
+
+if videoWriter.isOpened():
+	print("VideoWriter Open Successful.")
+else:
+	print("Error opening VideoWriter.")
 
 img = np.zeros(shape=(height, width, 3), dtype=np.uint8)    
 
@@ -38,3 +43,5 @@ while count < 100:
 	print("Timestamp: %d" % time[0])
 	videoWriter.write(img)
 	count = count + 1
+
+videoWriter.release()

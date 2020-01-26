@@ -8,6 +8,7 @@ import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Core;
 import org.opencv.core.Size;
@@ -86,11 +87,11 @@ public class full_processing{
 		VideoWriter videoWriter = null;
 		if (outputVideoFilePath != null) {
 			videoWriter = new VideoWriter(outputVideoFilePath,
-				VideoWriter.fourcc('F', 'M', 'P', '4'), (double)frames_per_sec, frameSize, true);
+				VideoWriter.fourcc('M', 'J', 'P', 'G'), (double)frames_per_sec, frameSize, true);
 		}
 
 		/* Pre-allocate a video frame */
-		Mat frame = new Mat();
+		Mat frame = new Mat(frameSize, CvType.CV_8UC(3));
 
 		int count = 0;
 		while (count < 100) {

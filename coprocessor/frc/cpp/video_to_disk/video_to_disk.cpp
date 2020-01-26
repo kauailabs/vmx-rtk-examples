@@ -20,9 +20,9 @@ int main() {
 
 	Size frameSize(320, 240);
 	VideoWriter videoWriter("/media/pi/data/output.avi",
-			VideoWriter::fourcc('F', 'M', 'P', '4'), 15.0, frameSize, true);
+			VideoWriter::fourcc('M', 'J', 'P', 'G'), 15.0, frameSize, true);
 
-	Mat frame;
+	Mat frame(frameSize, CV_8UC(3));
 
 	int count = 0;
 	while (count < 100) {
